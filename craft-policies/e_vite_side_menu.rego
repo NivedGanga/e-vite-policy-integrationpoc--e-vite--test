@@ -21,8 +21,6 @@ result := {
 subject_allowed if {
   input.subject != null
   input.subject.attributes != null
-  input.subject.attributes["user-type"] != null
-  input.subject.attributes["user-type"] == "Admin"
   input.subject.name in allowed_subject_names
 }
 
