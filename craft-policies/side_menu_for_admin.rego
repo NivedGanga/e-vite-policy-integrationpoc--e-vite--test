@@ -15,7 +15,7 @@ allow if {
 result := {
   "allow": allow,
   "actions": ["View"],
-  "resources": [{"name":"Preferences Menu","attributes":{}},{"name":"Organization Menu","attributes":{}},{"name":"Users Menu","attributes":{}},{"name":"Reports Menu","attributes":{}},{"name":"Settings Menu","attributes":{}},{"name":"Accounts Menu","attributes":{}},{"name":"Activity Menu","attributes":{}},{"name":"Leaderboard Menu","attributes":{}},{"name":"Home Menu","attributes":{}},{"name":"Contact Us Menu","attributes":{}},{"name":"Rep E-Vites Menu","attributes":{}},{"name":"Rep E-Vites by Company Menu","attributes":{}},{"name":"E-Vites by Account Menu","attributes":{}}]
+  "resources": [{"name":"Preference Menu","attributes":{}},{"name":"Organization Menu","attributes":{}},{"name":"Users Menu","attributes":{}},{"name":"Reports Menu","attributes":{}},{"name":"Settings Menu","attributes":{}},{"name":"Accounts Menu","attributes":{}},{"name":"Activity Menu","attributes":{}},{"name":"Leaderboard Menu","attributes":{}},{"name":"Home Menu","attributes":{}},{"name":"ContactUs Menu","attributes":{}},{"name":"Rep Evites Menu","attributes":{}},{"name":"Rep Evites by Company Menu","attributes":{}}]
 }
 
 subject_allowed if {
