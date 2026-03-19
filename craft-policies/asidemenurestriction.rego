@@ -10,12 +10,18 @@ allowed_subject_names = {"User"}
 deny if {
     subject_allowed
     dependencies_allowed
+  }
+
+default allow_result := true
+
+allow_result := false if {
+    deny
 }
 
 result := {
-  "allow": not deny,
+  "allow": allow_result,
   "actions": ["Access"],
-  "resources": [{"name":"Users Menu","attributes":{}},{"name":"Reports Menu","attributes":{}},{"name":"Rep Evites Menu","attributes":{}},{"name":"Rep Evite by Company Menu","attributes":{}},{"name":"Evites by Account Menu","attributes":{}}]
+  "resources": [{"name":"Reports Menu","attributes":{}},{"name":"Rep Evites Menu","attributes":{}},{"name":"Rep Evite by Company Menu","attributes":{}},{"name":"Evites by Account Menu","attributes":{}}]
 }
 
 subject_allowed if {
