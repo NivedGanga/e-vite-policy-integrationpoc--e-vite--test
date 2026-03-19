@@ -10,12 +10,12 @@ allowed_subject_names = {"User"}
 allow if {
     subject_allowed
     dependencies_allowed
-}
+  }
 
 result := {
   "allow": allow,
   "actions": ["View"],
-  "resources": [{"name":"Reports Menu","attributes":{}},{"name":"Settings Menu","attributes":{}},{"name":"Leaderboard Menu","attributes":{}},{"name":"Home Menu","attributes":{}},{"name":"ContactUs Menu","attributes":{}},{"name":"Rep Evites Menu","attributes":{}},{"name":"Rep Evite by Company Menu","attributes":{}},{"name":"Evites by Account Menu","attributes":{}},{"name":"Preference Menu","attributes":{}},{"name":"Organization Menu","attributes":{}},{"name":"Accounts Menu","attributes":{}},{"name":"Activity Menu","attributes":{}}]
+  "resources": [{"name":"Reports Menu","attributes":{}},{"name":"Settings Menu","attributes":{}},{"name":"Leaderboard Menu","attributes":{}},{"name":"Home Menu","attributes":{}},{"name":"ContactUs Menu","attributes":{}},{"name":"Rep Evites Menu","attributes":{}},{"name":"Rep Evite by Company Menu","attributes":{}},{"name":"Evites by Account Menu","attributes":{}},{"name":"Preference Menu","attributes":{}},{"name":"Organization Menu","attributes":{}},{"name":"Accounts Menu","attributes":{}},{"name":"Activity Menu","attributes":{}},{"name":"Users Menu","attributes":{}}]
 }
 
 subject_allowed if {
