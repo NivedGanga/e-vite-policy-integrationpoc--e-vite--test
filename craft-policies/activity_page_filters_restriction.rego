@@ -27,6 +27,8 @@ result := {
 subject_allowed if {
   input.subject != null
   input.subject.attributes != null
+  input.subject.attributes.userType != null
+  input.subject.attributes.userType == "Basic"
   input.subject.name in allowed_subject_names
 }
 
