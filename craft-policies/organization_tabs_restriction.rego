@@ -3,23 +3,17 @@ package organization_tabs_restriction
 import future.keywords.if
 import future.keywords.in
 
-default deny := false
+default allow := false
 
 allowed_subject_names = {"User"}
 
-deny if {
+allow if {
     subject_allowed
     dependencies_allowed
   }
 
-default allow_result := true
-
-allow_result := false if {
-    deny
-}
-
 result := {
-  "allow": allow_result,
+  "allow": allow,
   "actions": ["Access"],
   "resources": [{"name":"Organization Preferences","attributes":{}}]
 }
