@@ -1,4 +1,4 @@
-package asidemenurestriction
+package e_vite.policies.asidemenurestriction
 
 import future.keywords.if
 import future.keywords.in
@@ -28,8 +28,11 @@ subject_allowed if {
   input.subject != null
   input.subject.attributes != null
   input.subject.attributes.userType != null
-  input.subject.attributes.userType == "Basic"
+  input.subject.attributes.userType == "Admin"
   input.subject.name in allowed_subject_names
 }
 
 dependencies_allowed if { true }
+
+policy_effect := "deny"
+policy_state := "active"
