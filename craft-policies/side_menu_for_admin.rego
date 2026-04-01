@@ -1,4 +1,4 @@
-package side_menu_for_admin
+package e_vite.side_menu_for_admin
 
 import future.keywords.if
 import future.keywords.in
