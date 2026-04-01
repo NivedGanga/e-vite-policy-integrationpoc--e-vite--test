@@ -3,17 +3,23 @@ package e_vite.policies.activity_page_filters_restriction
 import future.keywords.if
 import future.keywords.in
 
-default allow := false
+default deny := false
 
 allowed_subject_names = {"User"}
 
-allow if {
+deny if {
     subject_allowed
     dependencies_allowed
   }
 
+default allow_result := true
+
+allow_result := false if {
+    deny
+}
+
 result := {
-  "allow": allow,
+  "allow": allow_result,
   "actions": ["Access"],
   "resources": [{"name":"Team Member Filter","attributes":{}}]
 }
@@ -28,5 +34,5 @@ subject_allowed if {
 
 dependencies_allowed if { true }
 
-policy_effect := "allow"
+policy_effect := "deny"
 policy_state := "active"
