@@ -21,7 +21,7 @@ allow_result := false if {
 result := {
   "allow": allow_result,
   "actions": ["Access"],
-  "resources": [{"name":"Rep Evites Menu","attributes":{}},{"name":"Invite User Menu","attributes":{}},{"name":"User Actions Menu","attributes":{}},{"name":"Rep Evite by Company Menu","attributes":{}},{"name":"Evites by Account Menu","attributes":{}},{"name":"Reports Menu","attributes":{}},{"name":"Team Member Filter","attributes":{}},{"name":"Users Menu","attributes":{}}]
+  "resources": [{"name":"Rep Evites Menus","attributes":{}},{"name":"Invite User Menu","attributes":{}},{"name":"User Actions Menu","attributes":{}},{"name":"Rep Evite by Company Menu","attributes":{}},{"name":"Evites by Account Menu","attributes":{}},{"name":"Reports Menu","attributes":{}},{"name":"Team Member Filter","attributes":{}},{"name":"Users Menu","attributes":{}}]
 }
 
 subject_allowed if {
