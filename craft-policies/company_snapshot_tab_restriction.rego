@@ -3,23 +3,17 @@ package e_vite.policies.company_snapshot_tab_restriction
 import future.keywords.if
 import future.keywords.in
 
-default deny := false
+default allow := false
 
 allowed_subject_names = {"User"}
 
-deny if {
+allow if {
     subject_allowed
     dependencies_allowed
   }
 
-default allow_result := true
-
-allow_result := false if {
-    deny
-}
-
 result := {
-  "allow": allow_result,
+  "allow": allow,
   "actions": ["Access"],
   "resources": [{"name":"Company All Time Snapshot","attributes":{}}]
 }
@@ -34,5 +28,5 @@ subject_allowed if {
 
 dependencies_allowed if { true }
 
-policy_effect := "deny"
+policy_effect := "allow"
 policy_state := "active"
