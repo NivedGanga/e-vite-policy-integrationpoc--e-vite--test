@@ -15,7 +15,7 @@ allow if {
 result := {
   "allow": allow,
   "actions": ["View"],
-  "resources": [{"name":"Preferences Menuu","attributes":{}},{"name":"Organization Menu","attributes":{}},{"name":"Users Menu","attributes":{}},{"name":"Reports Menu","attributes":{}},{"name":"Settings Menu","attributes":{}},{"name":"Accounts Menu","attributes":{}},{"name":"Activity Menu","attributes":{}},{"name":"Leaderboard Menu","attributes":{}},{"name":"Home Menu","attributes":{}}]
+  "resources": [{"name":"Preferences Men","attributes":{}},{"name":"Organization Menu","attributes":{}},{"name":"Users Menu","attributes":{}},{"name":"Reports Menu","attributes":{}},{"name":"Settings Menu","attributes":{}},{"name":"Accounts Menu","attributes":{}},{"name":"Activity Menu","attributes":{}},{"name":"Leaderboard Menu","attributes":{}},{"name":"Home Menu","attributes":{}}]
 }
 
 subject_allowed if {
