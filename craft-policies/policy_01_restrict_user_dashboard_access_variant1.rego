@@ -21,7 +21,7 @@ allow_result := false if {
 result := {
     "allow": allow_result,
     "actions": ["VIEW_DASHBOARD"],
-    "resources": [{"name": "Dashboardss", "attributes": {"type": "internal", "visibility": "private"}}]
+    "resources": [{"name": "Dashboards", "attributes": {"type": "internal", "visibility": "private"}}]
 }
 
 subject_allowed if {
