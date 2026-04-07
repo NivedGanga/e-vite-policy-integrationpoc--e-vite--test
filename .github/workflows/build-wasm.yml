@@ -3,9 +3,9 @@ name: Build and Store Wasm
 on:
   push:
     branches:
-      - '**' # Triggers on any branch
+      - "**" # Triggers on any branch
     paths-ignore:
-      - 'executable/**' # Prevent infinite loop if we push a change strictly to the executable folder
+      - "executable/**" # Prevent infinite loop if we push a change strictly to the executable folder
 
 permissions:
   contents: write # Needed to push the wasm file back to the repository
@@ -22,9 +22,22 @@ jobs:
 
       - name: Install OPA
         run: |
-          curl -L -o opa https://openpolicyagent.org/downloads/latest/opa_linux_amd64_static
+          set -euo pipefail
+          # Pin OPA to the local version (keep this in sync with your machine)
+          OPA_VERSION=1.15.1
+          ARCH=$(uname -m)
+          case "${ARCH}" in
+            x86_64) ARCH_NAME=amd64 ;;
+            aarch64|arm64) ARCH_NAME=arm64 ;;
+            *) ARCH_NAME=amd64 ;;
+          esac
+          OPA_FILE=opa_linux_${ARCH_NAME}_static
+          URL="https://openpolicyagent.org/downloads/v${OPA_VERSION}/${OPA_FILE}"
+          echo "Downloading OPA from ${URL}"
+          curl -L -o opa "${URL}"
           chmod +x opa
           sudo mv opa /usr/local/bin/opa
+          opa version
 
       - name: Build Wasm
         run: |
@@ -39,6 +52,7 @@ jobs:
             -o bundle.tar.gz
 
           tar -xzf bundle.tar.gz -C out
+          # Copy the Wasm so the runtime can use the same compiled policy as local
           cp out/policy.wasm executable/policy.wasm
           echo "Built and stored executable/policy.wasm"
 
