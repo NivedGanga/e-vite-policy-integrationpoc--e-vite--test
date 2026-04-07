@@ -19,13 +19,9 @@ policy_entries[name] := {
 }
 
 include_policy(policy) if {
-  policy.policy_state == "active"
-  policy.policy_effect == "allow"
   policy.result.allow
 }
 
 include_policy(policy) if {
-  policy.policy_state == "active"
-  policy.policy_effect == "deny"
   not policy.result.allow
 }
