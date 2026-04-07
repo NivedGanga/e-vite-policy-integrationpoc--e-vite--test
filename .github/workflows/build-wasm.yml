@@ -54,12 +54,35 @@ jobs:
             -o bundle.tar.gz
 
           tar -xzf bundle.tar.gz -C out
-          # Copy the Wasm so the runtime can use the same compiled policy as local
-          cp out/policy.wasm executable/policy.wasm
+          # Inspect bundle and copy Wasm
+          echo "--- bundle contents ---"
+          tar -tzf bundle.tar.gz | sed -n '1,200p'
+          tar -xzf bundle.tar.gz -C out
+          ls -l out || true
+          if [ -f out/policy.wasm ]; then
+            echo "sha256 out/policy.wasm:"; sha256sum out/policy.wasm || true
+            cp -v out/policy.wasm executable/policy.wasm
+            echo "sha256 executable/policy.wasm after copy:"; sha256sum executable/policy.wasm || true
+          else
+            echo "ERROR: out/policy.wasm not found"
+            exit 1
+          fi
           echo "Built and stored executable/policy.wasm"
 
       - name: Commit and Push Wasm file
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: update built policy.wasm"
-          file_pattern: "executable/policy.wasm"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          echo "--- pre-commit status ---"
+          git status --porcelain || true
+          echo "--- staged differences (if any) ---"
+          git add executable/policy.wasm || true
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m "chore: update built policy.wasm"
+            BRANCH_NAME=${GITHUB_REF#refs/heads/}
+            echo "Pushing to ${BRANCH_NAME}"
+            git push "https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:${BRANCH_NAME}"
+          fi
