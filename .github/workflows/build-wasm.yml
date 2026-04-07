@@ -19,6 +19,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }} # Checkout the branch that was pushed
+          fetch-depth: 0
+          persist-credentials: true
 
       - name: Install OPA
         run: |
@@ -57,7 +59,20 @@ jobs:
           echo "Built and stored executable/policy.wasm"
 
       - name: Commit and Push Wasm file
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: update built policy.wasm"
-          file_pattern: "executable/policy.wasm"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          echo "--- checksums ---"
+          if [ -f out/policy.wasm ]; then sha256sum out/policy.wasm || true; fi
+          if [ -f executable/policy.wasm ]; then sha256sum executable/policy.wasm || true; fi
+          echo "git status:" && git status --porcelain || true
+          git add executable/policy.wasm || true
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git -c user.name="github-actions[bot]" -c user.email="41898282+github-actions[bot]@users.noreply.github.com" commit -m "chore: update built policy.wasm"
+            BRANCH_NAME=${GITHUB_REF#refs/heads/}
+            echo "Pushing to ${BRANCH_NAME}"
+            git push "https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "HEAD:${BRANCH_NAME}"
+          fi
