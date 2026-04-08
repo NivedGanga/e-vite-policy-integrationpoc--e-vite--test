@@ -41,7 +41,7 @@ jobs:
           sudo mv opa /usr/local/bin/opa
           opa version
 
-      - name: Build Wasm
+      - name: Build and Commit Wasm
         run: |
           set -euo pipefail
           mkdir -p out
@@ -54,12 +54,17 @@ jobs:
             -o bundle.tar.gz
 
           tar -xzf bundle.tar.gz -C out
-          rm -f executable/policy.wasm
-          mv out/policy.wasm executable/policy.wasm
-          echo "Rebuilt and replaced executable/policy.wasm"
+          cp out/policy.wasm executable/policy.wasm
 
-      - name: Commit and Push Wasm file
-        uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore: update built policy.wasm"
-          file_pattern: "executable/policy.wasm"
+          echo "Built and stored executable/policy.wasm"
+
+          if [[ -z "$(git status --porcelain -- executable/policy.wasm)" ]]; then
+            echo "No changes in executable/policy.wasm; skipping commit and push."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add executable/policy.wasm
+          git commit -m "chore: update built policy.wasm"
+          git push origin "HEAD:${GITHUB_REF#refs/heads/}"
