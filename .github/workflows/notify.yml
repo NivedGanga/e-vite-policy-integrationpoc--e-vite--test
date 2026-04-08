@@ -52,7 +52,7 @@ jobs:
           echo "Commit: ${GITHUB_SHA}"
           echo "PWD: $(pwd)"
           opa version
-          echo "Policy source file count: $(find "${POLICY_SRC_DIR}" -maxdepth 1 -name '*.rego' | wc -l)"
+          echo "Policy source file count: $(find "${POLICY_SRC_DIR}" -type f -name '*.rego' | wc -l)"
           echo "Top package declarations from source:"
           grep -R -n '^package ' "${POLICY_SRC_DIR}" | head -20 || true
 
@@ -70,8 +70,9 @@ jobs:
           mkdir -p "${BUILD_POLICY_DIR}"
 
           # Build from a temporary policy copy so CI can normalize namespace shape
-          # without mutating repository source files.
-          cp "${POLICY_SRC_DIR}"/*.rego "${BUILD_POLICY_DIR}"/
+          # without mutating repository source files. Copy recursively so nested
+          # policy modules (for example depended-flags/*.rego) are included.
+          cp -R "${POLICY_SRC_DIR}/." "${BUILD_POLICY_DIR}/"
 
           expected_ns_count=$(grep -R -h -E '^package evite\.policies\.' "${BUILD_POLICY_DIR}" | wc -l || true)
           flat_ns_count=$(grep -R -h -E '^package evite\.' "${BUILD_POLICY_DIR}" | grep -v -E '^package evite\.policies\.' | wc -l || true)
