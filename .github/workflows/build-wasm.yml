@@ -44,13 +44,67 @@ jobs:
       - name: Build and Commit Wasm
         run: |
           set -euo pipefail
+          POLICY_SRC_DIR="craft-policies"
+          BUILD_POLICY_DIR=".tmp-build/craft-policies"
+
+          echo "=== Build Context Debug ==="
+          echo "Branch: ${GITHUB_REF}"
+          echo "Commit: ${GITHUB_SHA}"
+          echo "PWD: $(pwd)"
+          opa version
+          echo "Policy source file count: $(find "${POLICY_SRC_DIR}" -maxdepth 1 -name '*.rego' | wc -l)"
+          echo "Top package declarations from source:"
+          grep -R -n '^package ' "${POLICY_SRC_DIR}" | head -20 || true
+
+          if [[ -f executable/policy.wasm ]]; then
+            echo "Existing executable/policy.wasm:"
+            ls -l executable/policy.wasm
+            sha256sum executable/policy.wasm
+          else
+            echo "No existing executable/policy.wasm in repo."
+          fi
+
+          rm -rf .tmp-build out bundle.tar.gz
           mkdir -p out
           mkdir -p executable
+          mkdir -p "${BUILD_POLICY_DIR}"
 
-          opa build -t wasm -e evite/result ./craft-policies
+          # Build from a temporary policy copy so CI can normalize namespace shape
+          # without mutating repository source files.
+          cp "${POLICY_SRC_DIR}"/*.rego "${BUILD_POLICY_DIR}"/
+
+          expected_ns_count=$(grep -R -h -E '^package evite\.policies\.' "${BUILD_POLICY_DIR}" | wc -l || true)
+          flat_ns_count=$(grep -R -h -E '^package evite\.' "${BUILD_POLICY_DIR}" | grep -v -E '^package evite\.policies\.' | wc -l || true)
+
+          echo "Namespace counts before normalization:"
+          echo "  evite.policies.*: ${expected_ns_count}"
+          echo "  evite.* (non-policies): ${flat_ns_count}"
+
+          # e_vite.rego aggregates from data.evite.policies; normalize policy_* packages
+          # to that namespace if sources are in the flat evite.* shape.
+          if [[ "${expected_ns_count}" -eq 0 && "${flat_ns_count}" -gt 0 ]]; then
+            echo "Normalizing policy package namespace from evite.* to evite.policies.*"
+            find "${BUILD_POLICY_DIR}" -name 'policy_*.rego' -type f -print0 | \
+              xargs -0 sed -i 's/^package evite\./package evite.policies./'
+          fi
+
+          echo "Top package declarations from build copy after normalization:"
+          grep -R -n '^package ' "${BUILD_POLICY_DIR}" | head -20 || true
+
+          opa build -t wasm -e evite/result "./${BUILD_POLICY_DIR}"
 
           tar -xzf bundle.tar.gz -C out
           cp out/policy.wasm executable/policy.wasm
+
+          echo "Built out/policy.wasm details:"
+          ls -l out/policy.wasm
+          sha256sum out/policy.wasm
+
+          if [[ -f executable/policy.wasm ]]; then
+            echo "Final executable/policy.wasm details:"
+            ls -l executable/policy.wasm
+            sha256sum executable/policy.wasm
+          fi
 
           echo "Built and stored executable/policy.wasm"
 
