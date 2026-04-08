@@ -47,11 +47,7 @@ jobs:
           mkdir -p out
           mkdir -p executable
 
-          opa build \
-            --target wasm \
-            --entrypoint evite/result \
-            ./craft-policies \
-            -o bundle.tar.gz
+          opa build -t wasm -e evite/result ./craft-policies
 
           tar -xzf bundle.tar.gz -C out
           cp out/policy.wasm executable/policy.wasm
