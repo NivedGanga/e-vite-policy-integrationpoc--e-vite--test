@@ -7,7 +7,7 @@ default flags_active := false
 
 feature_flags := [
   {"name": "enable_ca_free_users", "is_enabled": false},
-  {"name": "enable_sso", "is_enabled": true},
+  {"name": "enable_sso", "is_enabled": false},
 ]
 
 flags_active := true if {
