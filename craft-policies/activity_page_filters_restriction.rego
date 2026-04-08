@@ -19,7 +19,7 @@ allow_result := allow
 result := {
   "allow": allow_result,
   "actions": ["Access"],
-  "resources": [{"name":"Team Member Filter","attributes":{}}]
+  "resources": [{"name":"Team Member Filters","attributes":{}}]
 }
 
 subject_allowed if {
