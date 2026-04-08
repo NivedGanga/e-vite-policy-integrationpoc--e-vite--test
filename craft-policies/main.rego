@@ -1,4 +1,4 @@
-package e_vite
+package evite
 
 import future.keywords.if
 import future.keywords.in
@@ -14,7 +14,7 @@ policy_entries[name] := {
   "actions": policy.result.actions,
   "resources": policy.result.resources,
 } if {
-  some name, policy in data.e_vite.policies
+  some name, policy in data.evite.policies
   include_policy(policy)
 }
 

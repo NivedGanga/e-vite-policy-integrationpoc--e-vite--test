@@ -80,7 +80,7 @@ jobs:
           echo "  evite.policies.*: ${expected_ns_count}"
           echo "  evite.* (non-policies): ${flat_ns_count}"
 
-          # e_vite.rego aggregates from data.evite.policies; normalize policy_* packages
+          # evite.rego aggregates from data.evite.policies; normalize policy_* packages
           # to that namespace if sources are in the flat evite.* shape.
           if [[ "${expected_ns_count}" -eq 0 && "${flat_ns_count}" -gt 0 ]]; then
             echo "Normalizing policy package namespace from evite.* to evite.policies.*"

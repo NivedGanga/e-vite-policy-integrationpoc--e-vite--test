@@ -1,4 +1,4 @@
-package e_vite.policies.asidemenurestriction
+package evite.policies.asidemenurestriction
 
 import future.keywords.if
 import future.keywords.in

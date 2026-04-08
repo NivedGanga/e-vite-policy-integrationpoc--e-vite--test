@@ -1,4 +1,4 @@
-package e_vite.policies.activity_page_filters_restriction
+package evite.policies.activity_page_filters_restriction
 
 import future.keywords.if
 import future.keywords.in
